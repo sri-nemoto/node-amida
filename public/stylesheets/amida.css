@@ -1,0 +1,10 @@
+canvas {
+    border:1px solid black;
+}
+
+.start_button {
+    width: 80px;
+    /* margin-left: 110px; */
+    /* margin-right: 110px; */
+    text-align: center;
+}
