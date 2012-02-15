@@ -1,0 +1,33 @@
+<div id="main" class="clearfix">
+    <!-- Show a "Please Upgrade" box to both IE7 and IE6 users (Edit to IE 6 if you just want to show it to IE6 users) - jQuery will load the content from js/ie.html into the div -->
+    
+    <!--[if lte IE 7]>
+        <div class="ie warning"></div>
+    <![endif]-->
+    
+    <div id="content" role="main">
+        <article class="post">
+                <form action="create" method="post">
+                	<fieldset>
+                    	<legend>パスワードを入力して下さい</legend>
+
+                        <p>
+                            <label for="password">パスワード</label>
+                            <input type="text" name="password" id="password" maxlength= "10" value="" />
+                        </p>
+                        <p><%= password_error %></p>
+                        <p>
+                        <input type="submit" name="submit" value="作成" />
+                        </p>
+                    
+                    </fieldset>
+                    
+                    <p class="hide" id="response"></p>
+                
+                </form>
+        
+        </article> <!-- .post -->
+    
+    </div> <!-- #content -->
+
+</div> <!-- #main -->
