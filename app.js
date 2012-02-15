@@ -33,7 +33,9 @@ app.configure('production', function(){
 
 app.get('/', routes_index.index);
 app.get('/regist', routes_regist.index);
-app.get('/join', routes_join.index);
+app.get('/join', function(req, res) {
+    res.render('join');
+});
 app.get('/auth', function(req, res) {
     res.render('auth', {'password_error': ''});
 });
