@@ -34,6 +34,9 @@ app.configure('production', function(){
 app.get('/', routes_index.index);
 app.get('/regist', routes_regist.index);
 app.get('/join', routes_join.index);
+app.get('/auth', function(req, res) {
+    res.render('auth', {'password_error': ''});
+});
 
 app.listen(3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
