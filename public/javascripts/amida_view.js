@@ -55,6 +55,8 @@ var design = function() {
     var start_button_margin = Math.floor(total_width / player_count / 2) - 40;
     $('.start_button').css('margin-left', start_button_margin + 'px');
     //$('.start_button').css({ margin-left: start_button_margin + 'px', margin-right: start_button_margin + 'px'});
+    var start_text_margin = Math.floor(total_width / player_count / 2) - 55;
+    $('.start_text').css('margin-left', start_text_margin + 'px');
     
     $('#amida').width(point_length_x * player_count * 5);
     //$('#amida').width(900);

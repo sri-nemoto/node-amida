@@ -4,7 +4,25 @@ canvas {
 
 .start_button {
     width: 80px;
-    /* margin-left: 110px; */
-    /* margin-right: 110px; */
+    text-align: center;
+}
+
+.start_text {
+    width: 80px;
+    text-align: center;
+}
+
+.member_name {
+    text-align: center;
+}
+
+.start_division {
+    width: 300px;
+    float: left;
+}
+
+.goal_division {
+    width: 300px;
+    float: left;
     text-align: center;
 }
