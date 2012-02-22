@@ -6,7 +6,8 @@
 var express = require('express')
   , routes_index = require('./routes/index')
   , routes_regist = require('./routes/regist')
-  , routes_join = require('./routes/join');
+  , routes_join = require('./routes/join'),
+    Manager = require('./lib/amida').Manager;
 
 var app = module.exports = express.createServer();
 
@@ -38,6 +39,17 @@ app.get('/join', function(req, res) {
 });
 app.get('/auth', function(req, res) {
     res.render('auth', {'password_error': ''});
+});
+app.post('/authCheck', function(req, res){
+    console.log(req.body.password);
+    check = true;
+    //TODO: validate
+    //Manager.auth();
+    if (check === false) {
+        res.render('auth', {'password_error': 'パスワードが存在しません'});
+    }
+    console.log('auth ok!');
+    res.redirect('join');
 });
 
 app.listen(3000);
