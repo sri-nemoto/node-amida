@@ -37,19 +37,24 @@ app.get('/regist', routes_regist.index);
 app.get('/join', function(req, res) {
     res.render('join');
 });
+
+// 認証ページ生成
 app.get('/auth', function(req, res) {
-    res.render('auth', {'password_error': ''});
+    res.render('auth', {password: '',
+                                password_error: ''});
 });
+
+// 認証確認
 app.post('/authCheck', function(req, res){
-    //console.log(req.body.password);
-    check = false;
+    var check = true;
     //TODO: validate
     //Manager.auth();
-    if (check === false) {
-        res.render('auth', {'password_error': 'パスワードが存在しません'});
+    if (check === true) {
+        res.render('auth', {password : req.body.password,
+                                    password_error: 'パスワードが存在しません'});
+    } else {
+        res.redirect('join');
     }
-    //console.log('auth ok!');
-    res.redirect('join');
 });
 
 app.listen(3000);
