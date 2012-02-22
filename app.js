@@ -22,12 +22,17 @@ app.configure(function(){
   app.use(express.static(__dirname + '/public'));
 });
 
-app.configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-});
+function NotFound(msg){
+  this.name = 'NotFound';
+  Error.call(this, msg);
+  Error.captureStackTrace(this, arguments.callee);
+}
+NotFound.prototype.__proto__ = Error.prototype;
 
-app.configure('production', function(){
-  app.use(express.errorHandler());
+// Error
+
+app.error(function (err, req, res, next) {
+  res.render('error', { e_message: err })
 });
 
 // Routes
@@ -55,6 +60,17 @@ app.post('/authCheck', function(req, res){
     } else {
         res.redirect('join');
     }
+});
+
+// 404
+app.get('/*', function(req, res){
+  throw new NotFound();
+});
+
+// uncaughtException -> stop it's!
+process.on('uncaughtException', function(err) {
+  console.log('uncaughtException happened: ' + err);
+  process.exit(0);
 });
 
 app.listen(3000);
