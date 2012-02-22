@@ -41,14 +41,14 @@ app.get('/auth', function(req, res) {
     res.render('auth', {'password_error': ''});
 });
 app.post('/authCheck', function(req, res){
-    console.log(req.body.password);
-    check = true;
+    //console.log(req.body.password);
+    check = false;
     //TODO: validate
     //Manager.auth();
     if (check === false) {
         res.render('auth', {'password_error': 'パスワードが存在しません'});
     }
-    console.log('auth ok!');
+    //console.log('auth ok!');
     res.redirect('join');
 });
 
