@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies.
  */
@@ -6,8 +5,9 @@
 var express = require('express')
   , routes_index = require('./routes/index')
   , routes_regist = require('./routes/regist')
-  , routes_join = require('./routes/join'),
-    Manager = require('./lib/amida').Manager;
+  , routes_join = require('./routes/join')
+  , routes_auth = require('./routes/auth')
+  ,  Manager = require('./lib/amida').Manager;
 
 var app = module.exports = express.createServer();
 
@@ -42,25 +42,8 @@ app.get('/regist', routes_regist.index);
 app.get('/join', function(req, res) {
     res.render('join');
 });
-
-// 認証ページ生成
-app.get('/auth', function(req, res) {
-    res.render('auth', {password: '',
-                                password_error: ''});
-});
-
-// 認証確認
-app.post('/authCheck', function(req, res){
-    var check = true;
-    //TODO: validate
-    //Manager.auth();
-    if (check === true) {
-        res.render('auth', {password : req.body.password,
-                                    password_error: 'パスワードが存在しません'});
-    } else {
-        res.redirect('join');
-    }
-});
+app.get('/auth', routes_auth.index);
+app.get('/authCheck', routes_auth.check);
 
 // 404
 app.get('/*', function(req, res){
@@ -68,8 +51,7 @@ app.get('/*', function(req, res){
 });
 
 // uncaughtException -> stop it's!
-process.on('uncaughtException', function(err) {
-  console.log('uncaughtException happened: ' + err);
+process.on('uncaughtException', function(err) {  console.log('uncaughtException happened: ' + err);
   process.exit(0);
 });
 
