@@ -45,10 +45,10 @@ app.get('/join', function(req, res) {
 app.get('/auth', routes_auth.index);
 app.get('/authCheck', routes_auth.check);
 
-// 404
-app.get('/*', function(req, res){
-  throw new NotFound();
-});
+// // 404
+// app.get('/*', function(req, res){
+//  throw new NotFound();
+//});
 
 // uncaughtException -> stop it's!
 process.on('uncaughtException', function(err) {  console.log('uncaughtException happened: ' + err);
