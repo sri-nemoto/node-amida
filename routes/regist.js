@@ -21,12 +21,11 @@ exports.index = function(req, res){
     , user_pass: 'luser_pass4'
     , registed: Date.now()
     , plots: [
-       {x: 1, y: 1}
-       , {x: 1, y: 2}
-       , {x: 1, y: 3}
-       , {x: 1, y: 4}
-       , {x: 1, y: 5}
-       , {x: 1, y: 6}]
+      {start: {x: 0, y: 5}, end: {x: 5, y: 5}}
+      , {start: {x: 10, y:  5}, end: {x: 15, y: 5}}
+      , {start: {x:  5, y: 10}, end: {x: 10, y: 10}}
+      , {start: {x:  0, y: 15}, end: {x:  5, y: 15}}
+      , {start: {x: 10, y: 15}, end: {x: 15, y: 15}}]
     , url: (function(i, s) {
       var random = '';
         for (; i > 0; i--) {
@@ -39,8 +38,9 @@ exports.index = function(req, res){
     })(64, 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789')
   };
 
-  Manager.regist(amida, function(err) {
+  Manager.regist(amida, function(err, data) {
     // @todo something
+    console.log(data.plots);
   });
 
   // redner
