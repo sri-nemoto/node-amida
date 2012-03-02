@@ -4,25 +4,30 @@
  */
 var Manager = require('../lib/amida').Manager;
 
-// 参加者追加
+// アミダ表示(参加者入力画面)
 exports.index = function(req, res) {
+
+  console.log("join/index");
+  res.render('index', { title: 'Express' });
+}
+
+// 参加者追加
+exports.join = function(req, res) {
 
   // @todo validation
 
   // @todo delete test code
-  var id = "4f32a813ae62f1344a00000f";
-
-  var users = [
-    {name: 'User3-1', position: 1}
-    , {name: 'User3-2', position: 2}
-    , {name: 'User3-3', position: 3}
-    , {name: 'User3-4', position: 4}
-  ];
-
-  Manager.join(id, users, function(err) {
-    // @todo something
+  var url       = req.params.url;  
+  var position = req.params.position;
+  var name     = req.params.name;
+  
+  Manager.join(url, name, position, function(err, amida) {
+    if (!err) {
+      console.log("success");
+    }
+    console.log(err);
+    
+    // redner
+    res.redirect('/join');
   });
-
-  // redner
-  res.render('index', { title: 'Express' })
 }
