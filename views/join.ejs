@@ -17,24 +17,24 @@
                 <div id="amida" style="margin:0px auto;">
                     <div>
                         <% if (amida.items.length == amida.users.length) { %>
-                          <% for ( var i = 0 ; i < amida.users.length ; i++ ) { %>
-                            <div class="start_division"><input type="button" id="button_<%= i %>" class="start_button" value="<%= amida.users[i].name %>" /></div>
-                          <% } %>
+                            <% for ( var i = 0 ; i < amida.users.length ; i++ ) { %>
+                              <div class="start_division"><input type="button" id="button_<%= i %>" class="start_button" value="<%= amida.users[i].name %>" /></div>
+                            <% } %>
                         <% } else { %>
-                          <% for ( var i = 0 ; i < amida.items.length ; i++ ) { %>
-                          <% var user_regist_flag = true; %>
-                          <div class="start_division">
-                              <% for ( var j = 0 ; j < amida.users.length ; j++ ) { %>
-                                  <% if (amida.users[j].position == i) { %>
-                                  <div class="member_name"><%= amida.users[j].name %></div>
-                                  <% var user_regist_flag = false; %>
-                                  <% } %>
-                              <% } %>
-                              <% if (user_regist_flag) { %>
-                              <input type="text" class="start_text" id="user_<%= i %>" value="" /><input type="button" class="user_regist" id="user_regist_<%= i %>" value="決定" />
-                              <% } %>
-                          </div>
-                          <% } %>
+                            <% for ( var i = 0 ; i < amida.items.length ; i++ ) { %>
+                            <% var user_regist_flag = true; %>
+                            <div class="start_division">
+                                <% for ( var j = 0 ; j < amida.users.length ; j++ ) { %>
+                                    <% if (amida.users[j].position == i) { %>
+                                    <div class="member_name"><%= amida.users[j].name %></div>
+                                    <% var user_regist_flag = false; %>
+                                    <% } %>
+                                <% } %>
+                                <% if (user_regist_flag) { %>
+                                <input type="text" class="start_text" id="user_<%= i %>" value="" /><input type="button" class="user_regist" id="user_regist_<%= i %>" value="決定" />
+                                <% } %>
+                            </div>
+                            <% } %>
                         <% } %>
                     </div>
                     <div  class="clearfix">

@@ -19,12 +19,11 @@ var socket = function () {
     socket.on('connect', function(message) {
         console.log('connect start');
         var url = $('#url').val();
-        //socket.send(url);
         socket.emit('url', url);
     });
     
     //データ受信ハンドラ
-    socket.on('amida_data', function(data){
+    socket.on('amidaData', function(data){
         if (data) {
             
             line_data = data;
@@ -160,24 +159,6 @@ $(function () {
     
     // socket通信
     socket();
-    
-    /*
-    // HTMLデザイン
-    design();
-    
-    // 静的ライン作成
-    make_line();
-    
-    // アニメーション
-    $('.start_button').click(function() {
-        // 初期化
-        make_line();
-        
-        // アニメーション開始
-        var index = $(this).attr("id").replace("button_", "");
-        animation(index);
-    });
-    */
 });
 
 // *******************************************

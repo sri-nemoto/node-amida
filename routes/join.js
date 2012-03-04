@@ -47,10 +47,10 @@ exports.join = function(req, res) {
   });
 }
 
-// socket
+// socket通信
 exports.socket = function (app) {
-  var socket_io = require('socket.io');
-  var io = socket_io.listen(app);
+  var socketIo = require('socket.io');
+  var io = socketIo.listen(app);
   io.sockets.on('connection', function(client){
     // ブラウザでアクセスした時に表示される
     client.send('接続しました');
@@ -61,7 +61,7 @@ exports.socket = function (app) {
       console.log('url');
       if (url) {
         makeLineData(url, function(data) {
-          client.emit('amida_data', data);
+          client.emit('amidaData', data);
         });
       }
     });
