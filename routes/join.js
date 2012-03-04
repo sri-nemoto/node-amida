@@ -49,52 +49,30 @@ exports.join = function(req, res) {
 
 // socket
 exports.socket = function (app) {
-    var socket_io = require('socket.io');
-    var io = socket_io.listen(app);
-    io.sockets.on('connection', function(client){
-        // ブラウザでアクセスした時に表示される
-        client.send('接続しました');
-        console.log('connection');
-        
-        // data
-        //client.emit('amida_data', line_data);
-        makeLineData(1, function(data) {
+  var socket_io = require('socket.io');
+  var io = socket_io.listen(app);
+  io.sockets.on('connection', function(client){
+    // ブラウザでアクセスした時に表示される
+    client.send('接続しました');
+    console.log('connection');
+    
+    //クライアント側からurl受信ハンドラ
+    client.on('url', function(url) {
+      console.log('url');
+      if (url) {
+        makeLineData(url, function(data) {
           client.emit('amida_data', data);
         });
-        
-        
-        //クライアント側からmessage受信ハンドラ
-        client.on('message', function(message) {
-            //自分のブラウザへ
-            client.send(message);
-            //他のブラウザへ
-            client.broadcast(message);
-        });
-        
-        //クライアント切断時のハンドラ
-        client.on('disconnect', function(){
-            //client.broadcast();
-        });
-    
+      }
     });
-}
-
-// line_data
-var line_data = {
-    vertical :    [
-                      { start: { x: 0, y: 0 }, end: { x: 0, y: 20 }, end_name: "" },
-                      { start: { x: 5, y: 0 }, end: { x: 5, y: 20 }, end_name: "当たり" },
-                      { start: { x: 10, y: 0 }, end: { x: 10, y: 20 }, end_name: "" }
-                  ],
     
-    horizontal :  [
-                      { start: { x: 0, y: 5 },  end: { x: 5, y: 5 } },
-                      { start: { x: 5, y: 10 },  end: { x: 10, y: 10 } },
-                      { start: { x: 5, y: 12 },  end: { x: 10, y: 12 } },
-                      { start: { x: 5, y: 7 },  end: { x: 10, y: 7 } },
-                      { start: { x: 0, y: 15 },  end: { x: 5, y: 15 } }
-                  ]
-};
+    //クライアント切断時のハンドラ
+    client.on('disconnect', function(){
+      client.send('切断しました');
+    });
+  
+  });
+}
 
 var makeLineData = function(url, callback) {
   if (url) {

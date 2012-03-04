@@ -5,25 +5,6 @@
 
 // 座標データ
 
-/*
-var line_data = {
-    vertical :      [
-                        { start: { x: 0, y: 0 }, end: { x: 0, y: 20 }, end_name: "" },
-                        { start: { x: 5, y: 0 }, end: { x: 5, y: 20 }, end_name: "当たり" },
-                        { start: { x: 10, y: 0 }, end: { x: 10, y: 20 }, end_name: "" }
-                    ],
-    
-    horizontal :    [
-                        [ { x: 0, y: 5 }, { x: 5, y: 5 } ],
-                        [ { x: 5, y: 10 }, { x: 10, y: 10 } ],
-                        [ { x: 5, y: 12 }, { x: 10, y: 12 } ],
-                        [ { x: 5, y: 7 }, { x: 10, y: 7 } ],
-                        [ { x: 0, y: 15 }, { x: 5, y: 15 } ]
-                    ]
-};
-
-var player_count = line_data.vertical.length;
-*/
 var line_data = null;
 var player_count = 0;
 var total_width = 900;
@@ -37,12 +18,14 @@ var socket = function () {
 
     socket.on('connect', function(message) {
         console.log('connect start');
+        var url = $('#url').val();
+        //socket.send(url);
+        socket.emit('url', url);
     });
     
     //データ受信ハンドラ
     socket.on('amida_data', function(data){
         if (data) {
-            
             
             line_data = data;
             player_count = line_data.vertical.length;
