@@ -16,23 +16,44 @@
             <div class="entry-content">
                 <div id="amida" style="margin:0px auto;">
                     <div>
-                        <div class="start_division"><div class="member_name">１２３４５６７８９０</div></div>
-                        <div class="start_division"><input type="button" id="button_1" class="start_button" value="ほげほげほげほげほげほげ" /></div>
-                        <div class="start_division"><input type="text" class="start_text" value="nakamura" /><input type="button" value="決定" /></div>
+                        <% if (amida.items.length == amida.users.length) { %>
+                          <% for ( var i = 0 ; i < amida.users.length ; i++ ) { %>
+                            <div class="start_division"><input type="button" id="button_<%= i %>" class="start_button" value="<%= amida.users[i].name %>" /></div>
+                          <% } %>
+                        <% } else { %>
+                          <% for ( var i = 0 ; i < amida.items.length ; i++ ) { %>
+                          <% var user_regist_flag = true; %>
+                          <div class="start_division">
+                              <% for ( var j = 0 ; j < amida.users.length ; j++ ) { %>
+                                  <% if (amida.users[j].position == i) { %>
+                                  <div class="member_name"><%= amida.users[j].name %></div>
+                                  <% var user_regist_flag = false; %>
+                                  <% } %>
+                              <% } %>
+                              <% if (user_regist_flag) { %>
+                              <input type="text" class="start_text" id="user_<%= i %>" value="" /><input type="button" class="user_regist" id="user_regist_<%= i %>" value="決定" />
+                              <% } %>
+                          </div>
+                          <% } %>
+                        <% } %>
                     </div>
                     <div  class="clearfix">
                         <canvas id="sample" width="900" height="400"></canvas>
                     </div>
                     <div>
-                        <div class="goal_division">１２３４５６７８</div>
-                        <div class="goal_division">１２３４５６７８</div>
-                        <div class="goal_division">１２３４５６７８</div>
+                    <% for ( var i = 0 ; i < amida.items.length ; i++ ) { %>
+                        <% if (amida.items[i].position == i ) { %>
+                        <div class="goal_division"><%= amida.items[i].name %></div>
+                        <% } %>
+                    <% } %>
                     </div>
                 </div>
             </div>
+            <input type="hidden" id="url" value="<%= amida.url %>" />
         </article>
-	</div> <!-- #content -->
+    </div> <!-- #content -->
 
 
 
 </div> <!-- #main -->
+<script src="/socket.io/lib/socket.io.js"></script>

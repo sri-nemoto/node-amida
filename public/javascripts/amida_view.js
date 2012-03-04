@@ -4,6 +4,8 @@
 // *******************************************
 
 // 座標データ
+
+/*
 var line_data = {
     vertical :      [
                         { start: { x: 0, y: 0 }, end: { x: 0, y: 20 }, end_name: "" },
@@ -20,8 +22,73 @@ var line_data = {
                     ]
 };
 
-var total_width = 900;
 var player_count = line_data.vertical.length;
+*/
+var line_data = null;
+var player_count = 0;
+var total_width = 900;
+
+// *******************************************
+// socket通信
+// *******************************************
+
+var socket = function () {
+    var socket = io.connect('http://'+ location.hostname +':3000');
+
+    socket.on('connect', function(message) {
+        console.log('connect start');
+    });
+    
+    //データ受信ハンドラ
+    socket.on('amida_data', function(data){
+        if (data) {
+            
+            
+            line_data = data;
+            player_count = line_data.vertical.length;
+            get_line_length_definition();
+            
+            
+            // HTMLデザイン
+            design();
+            
+            // 静的ライン作成
+            make_line();
+            
+            // アニメーション
+            $('.start_button').click(function() {
+                // 初期化
+                make_line();
+                
+                // アニメーション開始
+                var index = $(this).attr("id").replace("button_", "");
+                animation(index);
+            });
+            
+            // ユーザー登録
+            $('.user_regist').click(function() {
+                var index = $(this).attr("id").replace("user_regist_", "");
+                var user_name  = $('#user_' + index).val();
+                if (user_name.length == 0 || user_name.length > 8) {
+                  alert('1文字以上8文字以内で名前を入力してください');
+                } else {
+                  var url = $('#url').val();
+                  $(window.location).attr('href', '/join/join/' + url + '/' + index + '/' + user_name);
+                }
+            });
+            
+            
+            console.log('data get :' + data.vertical.length);
+        } else {
+            console.log('data not get');
+        }
+    });
+    
+    //サーバ切断
+    socket.on('disconnect', function(message){
+        console.log('切断されました');
+    });
+}
 
 // *******************************************
 // 座標ライン定義
@@ -38,28 +105,43 @@ var get_horizontal_length = function () {
         return (horizontal_start.x - horizontal_end.x);
     }
 }
-var horizontal_length = get_horizontal_length();
+
+// 横棒座標の長さ
+var horizontal_length = 0;
 
 // 座標ひとマス当たりのpixel数
-var point_length_x = Math.floor(total_width / player_count / horizontal_length);
-var point_length_y = 20;
+var point_length_x = 0;
+var point_length_y = 0;
 
 // 座標の中心点の実座標(pixel数)
-var base_point = {x:Math.floor(total_width / player_count / 2) , y:0};
+var base_point = null;
+
+
+var get_line_length_definition = function () {
+    // 横棒座標の長さ
+    horizontal_length = get_horizontal_length();
+    
+    // 座標ひとマス当たりのpixel数
+    point_length_x = Math.floor(total_width / player_count / horizontal_length);
+    point_length_y = 20;
+    
+    // 座標の中心点の実座標(pixel数)
+    base_point = {x:Math.floor(total_width / player_count / 2) , y:0};
+}
 
 // *******************************************
 // HTMLデザイン
 // *******************************************
 
 var design = function() {
+    
     var start_button_margin = Math.floor(total_width / player_count / 2) - 40;
     $('.start_button').css('margin-left', start_button_margin + 'px');
-    //$('.start_button').css({ margin-left: start_button_margin + 'px', margin-right: start_button_margin + 'px'});
+    
     var start_text_margin = Math.floor(total_width / player_count / 2) - 55;
     $('.start_text').css('margin-left', start_text_margin + 'px');
     
     $('#amida').width(point_length_x * player_count * 5);
-    //$('#amida').width(900);
 }
 
 
@@ -93,12 +175,15 @@ var animation_define = {
 
 $(function () {
     
+    // socket通信
+    socket();
+    
+    /*
     // HTMLデザイン
     design();
     
     // 静的ライン作成
     make_line();
-    
     
     // アニメーション
     $('.start_button').click(function() {
@@ -109,6 +194,7 @@ $(function () {
         var index = $(this).attr("id").replace("button_", "");
         animation(index);
     });
+    */
 });
 
 // *******************************************
@@ -152,14 +238,6 @@ var make_line = function () {
         ctx.strokeStyle = line_define.stroke_style;
         ctx.lineWidth   = line_define.line_width;
         ctx.stroke();
-        
-        /*
-        // ゴール文字
-        ctx.font         = line_define.text_font;
-        ctx.textBaseline = line_define.text_base_line;
-        ctx.textAlign    = line_define.text_align;
-        ctx.fillText(end_name, set_point_x(end.x), set_point_y(end.y));
-        */
     }
     
     // 横ライン

@@ -40,7 +40,7 @@ app.error(function (err, req, res, next) {
 app.get('/', routes_index.index);
 app.get('/regist', routes_regist.index);
 app.get('/join/join/:url/:position/:name',routes_join.join);
-app.get('/join',routes_join.index);
+app.get('/join/:url',routes_join.index);
 app.get('/auth', routes_auth.index);
 app.get('/authCheck', routes_auth.check);
 
@@ -56,3 +56,6 @@ process.on('uncaughtException', function(err) {  console.log('uncaughtException 
 
 app.listen(3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+
+// socket io用
+routes_join.socket(app);
