@@ -97,8 +97,8 @@ var socket = function () {
 // 横棒座標の長さを取得
 var get_horizontal_length = function () {
     var horizontal_data  = line_data.horizontal[0];
-    var horizontal_start = horizontal_data[0];
-    var horizontal_end   = horizontal_data[1];
+    var horizontal_start = horizontal_data.start;
+    var horizontal_end   = horizontal_data.end;
     if (horizontal_end.x >= horizontal_start.x) {
         return (horizontal_end.x - horizontal_start.x);
     } else {
@@ -245,8 +245,8 @@ var make_line = function () {
         
         // 横ライン
         var point_data = line_data.horizontal[i];
-        var start      = point_data[0];
-        var end        = point_data[1];
+        var start      = point_data.start;
+        var end        = point_data.end;
         
         // 横ライン作成
         ctx.beginPath();
@@ -386,8 +386,8 @@ var animation = function (index) {
         var horizontal_datas = line_data.horizontal;
         
         for (i = 0 ; i < horizontal_datas.length ; i++) {
-            var point1 = horizontal_datas[i][0];
-            var point2 = horizontal_datas[i][1];
+            var point1 = horizontal_datas[i].start;
+            var point2 = horizontal_datas[i].end;
             
             if (x == set_point_x(point1.x) && y == set_point_y(point1.y)) {
                 x_destination = point2;
