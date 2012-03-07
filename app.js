@@ -5,6 +5,7 @@
 var express = require('express')
   , routes_index = require('./routes/index')
   , routes_regist = require('./routes/regist')
+  , routes_regist = require('./routes/registComp')
   , routes_join = require('./routes/join')
   , routes_auth = require('./routes/auth')
   ,  Manager = require('./lib/amida').Manager;
@@ -43,11 +44,13 @@ app.get('/join/join/:url/:position/:name',routes_join.join);
 app.get('/join/:url',routes_join.index);
 app.get('/auth', routes_auth.index);
 app.get('/authCheck', routes_auth.check);
+app.post('/registComp', routes_regist.index);
 
 // 404
 app.get('/*', function(req, res){
   throw new NotFound();
 });
+
 
 // uncaughtException -> stop it's!
 process.on('uncaughtException', function(err) {  console.log('uncaughtException happened: ' + err);
