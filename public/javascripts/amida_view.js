@@ -55,7 +55,7 @@ var socket = function () {
                   alert('1文字以上8文字以内で名前を入力してください');
                 } else {
                   var url = $('#url').val();
-                  $(window.location).attr('href', '/join/join/' + url + '/' + index + '/' + user_name);
+                  socket.emit('user', { url : url, position : index, name : user_name});
                 }
             });
             
@@ -63,6 +63,19 @@ var socket = function () {
             console.log('data get :' + data.vertical.length);
         } else {
             console.log('data not get');
+        }
+    });
+    
+    socket.on('message', function(message){
+        alert(message);
+    });
+    
+    socket.on('allUserPushed', function(data){
+        if (data) {
+          var url = $('#url').val();
+          if (data.url && url == data.url) {
+            $(window.location).attr('href', '/join/' + url);
+          }
         }
     });
     

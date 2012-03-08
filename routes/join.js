@@ -13,7 +13,7 @@ exports.index = function(req, res) {
       if(!err && amidas.length == 1) {
         for (var j = 0; j < amidas[0].items.length; j++ ) {
           console.log(amidas[0].items[j].name + "'s position is " + amidas[0].items[j].position);
-        }
+        }        
         res.render('join', {amida: amidas[0]});
       } else {
         console.log(err);
@@ -53,7 +53,7 @@ exports.socket = function (app) {
   var io = socketIo.listen(app);
   io.sockets.on('connection', function(client){
     // ブラウザでアクセスした時に表示される
-    client.send('接続しました');
+    //client.send('接続しました');
     console.log('connection');
     
     //クライアント側からurl受信ハンドラ
@@ -65,6 +65,30 @@ exports.socket = function (app) {
             client.emit('amidaData', data);
           } else {
             console.log(err);
+          }
+        });
+      }
+    });
+    
+    //クライアント側からuser受信ハンドラ
+    client.on('user', function(data) {
+      console.log("join from socket client");
+      
+      if (data) {
+        
+        // 参加user追加
+        var url      = data.url;  
+        var position = data.position;
+        var name     = data.name;
+        
+        Manager.join(url, name, position, function(err, amida) {
+          if (!err) {
+            console.log("join success");
+            client.emit('allUserPushed', { url: url });
+            client.broadcast.emit('allUserPushed', { url: url });
+          } else {
+            console.log(err);
+            client.send(err.message);
           }
         });
       }
