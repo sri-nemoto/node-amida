@@ -17,12 +17,12 @@ exports.index = function(req, res) {
         res.render('join', {amida: amidas[0]});
       } else {
         console.log(err);
-        res.redirect("/");
+        res.redirect('/');
       }
     });
   } else {
-    console.log("error");
-    res.redirect("/");
+    console.log('error');
+    res.redirect('/');
   }
 }
 
@@ -60,8 +60,12 @@ exports.socket = function (app) {
     client.on('url', function(url) {
       console.log('url');
       if (url) {
-        makeLineData(url, function(data) {
-          client.emit('amidaData', data);
+        Manager.getLineData(url, function(err, data) {
+          if (!err) {
+            client.emit('amidaData', data);
+          } else {
+            console.log(err);
+          }
         });
       }
     });
@@ -72,29 +76,4 @@ exports.socket = function (app) {
     });
   
   });
-}
-
-var makeLineData = function(url, callback) {
-  if (url) {
-    Manager.find(url, function(err, amidas) {
-      if(!err && amidas.length == 1) {
-        var amida = amidas[0];
-        // 縦棒
-        var items = amida.items;
-        var varticals = [];
-        for (var i = 0 ; i < items.length ; i++) {
-          var x = i * 5;
-          varticals[varticals.length] = { start : { x : x, y : 0 }, end : { x : x, y : 20 }, end_name : items[i].name };
-        }
-        // 横棒
-        var horizontals = amida.plots;
-        console.log("makeLineData");
-        var data = { vertical : varticals, horizontal : horizontals };
-        callback(data);
-      } else {
-        console.log(err);
-        return false;
-      }
-    });
-  }
 }
