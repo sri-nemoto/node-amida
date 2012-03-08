@@ -136,7 +136,11 @@ var design = function() {
     var start_text_margin = Math.floor(total_width / player_count / 2) - 55;
     $('.start_text').css('margin-left', start_text_margin + 'px');
     
-    $('#amida').width(point_length_x * player_count * 5);
+    $('#amida').width(point_length_x * player_count * horizontal_length);
+    
+    $('.goal_division').width(point_length_x * horizontal_length);
+    
+    $('.start_division').width(point_length_x * horizontal_length);
 }
 
 
