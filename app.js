@@ -19,6 +19,8 @@ app.configure(function(){
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(express.static(__dirname + '/public'));
+  app.use(express.cookieParser());
+  app.use(express.session({ secret: 'node-amida' }));
   app.use(app.router);
 });
 
@@ -39,7 +41,6 @@ app.error(function (err, req, res, next) {
 
 app.get('/', routes_index.index);
 app.get('/regist', routes_regist.index);
-app.get('/join/join/:url/:position/:name',routes_join.join);
 app.get('/join/:url',routes_join.index);
 app.get('/auth', routes_auth.index);
 app.get('/authCheck', routes_auth.check);

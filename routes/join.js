@@ -8,6 +8,15 @@ var Manager = require('../lib/amida').Manager;
 exports.index = function(req, res) {
   var url = req.params.url;
   
+  /*
+  // 認証チェック
+  console.log('session url', req.session.url);
+  if (req.session.url == undefined) {
+    req.session.url = url;
+    res.redirect('/authCheck/' + url);
+  }
+  */
+
   // @todo validation
   
   if (url) {
