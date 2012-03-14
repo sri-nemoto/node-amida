@@ -1,4 +1,3 @@
-
 /*
  * regist amida
  */
@@ -11,21 +10,17 @@ exports.index = function(req, res){
   var lottery_number = '';
   var amida_pass = '';
   var message = '';
-  
+  var error = [];
   
   res.render('regist', { locals: { title:title, lottery_number:lottery_number,
-        amida_pass:amida_pass, message:message} });
+        amida_pass:amida_pass, message:message, error:error } });
         
-
 };
 
 
-
-
 /*
- * regist amida
+ * registComp amida
  */
-
 exports.comp = function(req, res){
     
   var title = req.body.title;
@@ -46,25 +41,30 @@ exports.comp = function(req, res){
     
   var validator = new Validator();
   
-  // ƒoƒŠƒf[ƒgƒ`ƒFƒbƒN‚ğs‚¤B
-  validator.check(title, {"title" : "ƒ^ƒCƒgƒ‹‚ª•s³‚Å‚·B"}).len(2,20);
-  validator.check(lottery_number, {"lottery_number" : "”¼Šp”š‚Å“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B"}).isInt(); 
-  if (amida_pass) validator.check(amida_pass, {"amida_pass" : "ƒpƒXƒ[ƒh‚ª•s³‚Å‚·B"}).len(1,10);
-  if (message) validator.check(message, {"message" : "ƒƒbƒZ[ƒW‚ª•s³‚Å‚·B"}).len(1,300);
-
-  //console.log(validator.getErrors());
+  // ãƒãƒªãƒ‡ãƒ¼ãƒˆãƒã‚§ãƒƒã‚¯ã‚’è¡Œã†ã€‚
+  validator.check(title, {"title" : "ã‚¿ã‚¤ãƒˆãƒ«ãŒä¸æ­£ã§ã™ã€‚"}).len(2,20);
+  validator.check(lottery_number, {"lottery_number" : "åŠè§’æ•°å­—ã§å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚"}).isInt(); 
+  if (amida_pass) validator.check(amida_pass, {"amida_pass" : "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒä¸æ­£ã§ã™ã€‚"}).len(1,10);
+  if (message) validator.check(message, {"message" : "ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãŒä¸æ­£ã§ã™ã€‚"}).len(1,300);
+  
   // varidator error catch
-  if (validator.getErrors()) {
-      var vali_errors = validator.getErrors();
-      // “ü—ÍƒtƒH[ƒ€‚É‚ÄƒGƒ‰[•\¦‚ğs‚¤B
+  var vali_errors = validator.getErrors();
+  if (vali_errors[0]) {
+      // å…¥åŠ›ãƒ•ã‚©ãƒ¼ãƒ ã«ã¦ã‚¨ãƒ©ãƒ¼è¡¨ç¤ºã‚’è¡Œã†ã€‚
       
-      console.log(vali_errors);
-      
+      console.log(vali_errors[0].title);
+      //console.log(vali_errors[1].lottery_number);
       res.render('regist', { locals: { title:title, lottery_number:lottery_number,
         amida_pass:amida_pass, message:message, error:vali_errors[0] } });
   }
   
-  // ì¬‚³‚ê‚½amida‚ğ•\¦‚·‚éB
+  // URLã®ä½œæˆ
+  
+  // å®¤å²¡methodã«ã¦ã€æ¨ªç·šã®ä½œæˆ
+  
+  // mongoDBã¸ç™»éŒ²ã‚’è¡Œã†ã€‚
+  
+  // ä½œæˆã•ã‚ŒãŸamidaã‚’è¡¨ç¤ºã™ã‚‹ã€‚
   res.render('hoge', { locals: {title:title} });
 
 };
