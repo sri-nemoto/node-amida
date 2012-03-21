@@ -7,12 +7,12 @@ var Manager = require('../lib/amida').Manager;
 // アミダ表示(参加者入力画面)
 exports.index = function(req, res) {
   var url = req.params.url;
-  /*
+  
   // 認証チェック
   if (req.session.auth != url) {
     res.redirect('/auth/' + url);
   }
-  */
+  
   
   // @todo validation
   
