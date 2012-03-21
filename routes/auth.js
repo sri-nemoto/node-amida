@@ -6,33 +6,38 @@ var Manager = require('../lib/amida').Manager;
 // 認証ページ生成
 exports.index = function (req, res) {
   // redner
-  res.render('auth', {password:'',
-    password_error:''});
-
+  res.render('auth', {
+     password:'',
+     password_error:'',
+     auth_url: req.params.url
+    });
 };
 
 // 認証確認
 exports.check = function (req, res) {
-  var errorRender = function(pass) {
-    res.render(
-      'auth', {password: pass
-                , password_error:'パスワードが存在しません'}
-    );
-  };
+  var password = req.body.password;
+  var url = req.body.auth_url;
+//  var errorRender = function(pass) {
+//    res.render('auth', {
+//        password: pass,
+//        password_error:'パスワードが存在しません' ,
+//        auth_url: req.body.auth_url
+//      });
+//  };
 
   //TODO: validate
-  if (!req.body.password) {
-    errorRender('');
+  if (!password) {
+//    errorRender('');
   }
-  var pass = req.body.password
-  var url = "Wr9u9DhGKZRteGoFyskYYw9Ev57wbkiq5PtM52nLDdioXANM9VQhdphziEFWcfzq";
 
-  Manager.auth(url, pass, function(err, amida) {
-      console.log(amida);
-      if (!amida.userPass) {
-        errorRender(pass);
+  Manager.auth(url, 'password', function(err, amida) {
+      console.log("Mongo error->", err);
+      if (!amida[0].userPass) {
+//        errorRender(pass);
+        console.log("error !");
       } else {
-        res.redirect('join');
+        req.session.auth = url;
+        res.redirect('/join/' + url);
       }
     }
   );
