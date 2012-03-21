@@ -42,8 +42,8 @@ app.error(function (err, req, res, next) {
 app.get('/', routes_index.index);
 app.get('/regist', routes_regist.index);
 app.get('/join/:url',routes_join.index);
-app.get('/auth', routes_auth.index);
-app.get('/authCheck/:url', routes_auth.check);
+app.get('/auth/:url', routes_auth.index);
+app.post('/authCheck', routes_auth.check);
 app.post('/registCheck', routes_regist.check);
 
 // 404
