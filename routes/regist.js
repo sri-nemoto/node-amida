@@ -19,9 +19,9 @@ exports.index = function(req, res){
 
 
 /*
- * registComp amida
+ * registCheck amida
  */
-exports.comp = function(req, res){
+exports.check = function(req, res){
     
   var title = req.body.title;
   var lottery_number = req.body.lottery_number;
@@ -58,11 +58,16 @@ exports.comp = function(req, res){
         amida_pass:amida_pass, message:message, error:vali_errors[0] } });
   }
   
-  // URLの作成
   
   // 室岡methodにて、横線の作成
+  Manager.makePlotsData(lottery_number, function(err, amida) {
+    // @todo something
+    console.log(amida);
+  });
   
-  // mongoDBへ登録を行う。
+  
+  // mongoDBへ登録を行う。URLの作成。
+  
   
   // 作成されたamidaを表示する。
   res.render('hoge', { locals: {title:title} });
