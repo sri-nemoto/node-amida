@@ -44,6 +44,8 @@ exports.socket = function (app) {
       if (url) {
         Manager.getLineData(url, function(err, data) {
           if (!err) {
+            // socket channelに追加
+            client.join(url);
             client.emit('amidaData', data);
           } else {
             console.log(err);
@@ -67,7 +69,8 @@ exports.socket = function (app) {
           if (!err) {
             console.log('join success');
             client.emit('allUserPushed', { url: url });
-            client.broadcast.emit('allUserPushed', { url: url });
+            // 同じchannelに属しているsocket clientに対してのみbroadcast
+            client.broadcast.to(url).emit('allUserPushed', { url: url });
           } else {
             console.log(err);
             client.send(err.message);
