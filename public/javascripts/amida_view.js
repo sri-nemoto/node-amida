@@ -34,13 +34,16 @@ var socket = function () {
             // HTMLデザイン
             design();
             
+            var start_amida = $('#start_amida').val();
+            var holizontal_flag = (start_amida == "true") ? true : false;
+            
             // 静的ライン作成
-            make_line();
+            make_line(holizontal_flag);
             
             // アニメーション
             $('.start_button').click(function() {
                 // 初期化
-                make_line();
+                make_line(holizontal_flag);
                 
                 // アニメーション開始
                 var index = $(this).attr("id").replace("button_", "");
@@ -161,7 +164,7 @@ var line_define = {
 // アニメーション定義
 // *******************************************
 var animation_define = {
-    interval : 10,
+    interval : 5,
     stroke_style : "#ffffff",
     line_width : 5,
     line_cap : "square"
@@ -193,7 +196,7 @@ var set_point_y = function (point) {
 };
 
 // 静的ライン作成
-var make_line = function () {
+var make_line = function (holizontal_flag) {
     // canvasの2Dコンテキスト
     var ctx = document.getElementById("sample").getContext("2d");
     
@@ -221,27 +224,29 @@ var make_line = function () {
         ctx.stroke();
     }
     
-    // 横ライン
-    for (i = 0 ; i < line_data.horizontal.length ; i++) {
-        
+    if (holizontal_flag) {
         // 横ライン
-        var point_data = line_data.horizontal[i];
-        var start      = point_data.start;
-        var end        = point_data.end;
-        
-        // 横ライン作成
-        ctx.beginPath();
-        
-        // ライン始点
-        ctx.moveTo(set_point_x(start.x), set_point_y(start.y));
-        
-        // ライン終点
-        ctx.lineTo(set_point_x(end.x), set_point_y(end.y));
-        
-        // 定義したパスを描画
-        ctx.strokeStyle = line_define.stroke_style;
-        ctx.lineWidth   = line_define.line_width;
-        ctx.stroke();
+        for (i = 0 ; i < line_data.horizontal.length ; i++) {
+            
+            // 横ライン
+            var point_data = line_data.horizontal[i];
+            var start      = point_data.start;
+            var end        = point_data.end;
+            
+            // 横ライン作成
+            ctx.beginPath();
+            
+            // ライン始点
+            ctx.moveTo(set_point_x(start.x), set_point_y(start.y));
+            
+            // ライン終点
+            ctx.lineTo(set_point_x(end.x), set_point_y(end.y));
+            
+            // 定義したパスを描画
+            ctx.strokeStyle = line_define.stroke_style;
+            ctx.lineWidth   = line_define.line_width;
+            ctx.stroke();
+        }
     }
 };
 
@@ -269,7 +274,6 @@ var animation = function (index) {
     
     // アニメーションタイマー
     var timer_paint = setInterval(function () {
-    //var timer_paint = setTimeout(function () {
         
         if (moving_x_flag == true) {
             

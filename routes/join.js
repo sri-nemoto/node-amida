@@ -10,8 +10,9 @@ exports.index = function(req, res) {
   
   // 認証チェック
   if (req.session.auth != url) {
-    res.redirect('/authCheck/' + url);
+    res.redirect('/auth/' + url);
   }
+  
   
   // @todo validation
   
