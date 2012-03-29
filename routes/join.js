@@ -1,4 +1,3 @@
-
 /*
  * add member
  */
@@ -10,24 +9,26 @@ exports.index = function(req, res) {
   
   // 認証チェック
   if (req.session.auth != url) {
+    // 認証NGの場合
     res.redirect('/auth/' + url);
-  }
-  
-  
-  // @todo validation
-  
-  if (url) {
-    Manager.find(url, function(err, amidas) {
-      if(!err && amidas.length == 1) {
-        res.render('join', {amida: amidas[0]});
-      } else {
-        console.log(err);
-        res.redirect('/');
-      }
-    });
   } else {
-    console.log('error');
-    res.redirect('/');
+    // 認証OKの場合
+    
+    // @todo validation
+    
+    if (url) {
+      Manager.find(url, function(err, amidas) {
+        if(!err && amidas.length == 1) {
+          res.render('join', {amida: amidas[0]});
+        } else {
+          console.log(err);
+          res.redirect('/');
+        }
+      });
+    } else {
+      console.log('error');
+      res.redirect('/');
+    }
   }
 }
 
