@@ -18,12 +18,12 @@
                     <div>
                         <% if (amida.items.length == amida.users.length) { %>
                             <% for ( var i = 0 ; i < amida.users.length ; i++ ) { %>
-                              <div class="start_division"><input type="button" id="button_<%= i %>" class="start_button" value="<%= amida.users[i].name %>" /></div>
+                              <div class="start_division" id="start_division_<%= i %>"><input type="button" id="button_<%= i %>" class="start_button" value="<%= amida.users[i].name %>" /></div>
                             <% } %>
                         <% } else { %>
                             <% for ( var i = 0 ; i < amida.items.length ; i++ ) { %>
                             <% var user_regist_flag = true; %>
-                            <div class="start_division">
+                            <div class="start_division" id="start_division_<%= i %>">
                                 <% for ( var j = 0 ; j < amida.users.length ; j++ ) { %>
                                     <% if (amida.users[j].position == i) { %>
                                     <div class="member_name"><%= amida.users[j].name %></div>

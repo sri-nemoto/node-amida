@@ -69,9 +69,10 @@ exports.socket = function (app) {
         Manager.join(url, name, position, function(err, amida) {
           if (!err) {
             console.log('join success');
-            client.emit('allUserPushed', { url: url });
+            var users = amida.users;
+            client.emit('users', { users: amida.users });
             // 同じchannelに属しているsocket clientに対してのみbroadcast
-            client.broadcast.to(url).emit('allUserPushed', { url: url });
+            client.broadcast.to(url).emit('users', { users: users });
           } else {
             console.log(err);
             client.send(err.message);

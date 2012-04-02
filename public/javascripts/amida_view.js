@@ -41,9 +41,9 @@ var socket = function () {
             make_line(holizontal_flag);
             
             // アニメーション
-            $('.start_button').click(function() {
+            $('.start_button').live('click', function() {
                 // 初期化
-                make_line(holizontal_flag);
+                make_line(true);
                 
                 // アニメーション開始
                 var index = $(this).attr("id").replace("button_", "");
@@ -78,6 +78,30 @@ var socket = function () {
           var url = $('#url').val();
           if (data.url && url == data.url) {
             $(window.location).attr('href', '/join/' + url);
+          }
+        }
+    });
+    
+    socket.on('users', function(data){
+        var users = data.users;
+        if (users.length) {
+          if (player_count > 0 && player_count == users.length) {
+            for (i = 0 ; i < users.length ; i++ ) {
+              var user = users[i];
+              var element = '<input type="button" id="button_' + user.position + '" class="start_button" value="' + user.name  + '" />';
+              $('#start_division_' + user.position).empty();
+              $('#start_division_' + user.position).append(element);
+            }
+            make_line(true);
+            design();
+          } else {
+            for (i = 0 ; i < users.length ; i++ ) {
+              var user = users[i];
+              var element = '<div class="member_name">' + user.name + '</div>';
+              $('#start_division_' + user.position).empty();
+              $('#start_division_' + user.position).append(element);
+            }
+            design();
           }
         }
     });
