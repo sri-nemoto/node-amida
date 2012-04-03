@@ -4,93 +4,95 @@
 // *******************************************
 
 // 座標データ
-
 var line_data = null;
-var player_count = 0;
+var all_player_count = 0;
 var total_width = 900;
+
+// アニメーション開始フラグ
+var animation_flag = true;
 
 // *******************************************
 // socket通信
 // *******************************************
 
 var socket = function () {
-    var socket = io.connect('http://'+ location.hostname +':3000');
-
-    socket.on('connect', function(message) {
-        console.log('connect start');
-        var url = $('#url').val();
-        socket.emit('url', url);
+    var socket = io.connect("http://"+ location.hostname +":3000");
+    
+    // コネクションハンドラ
+    socket.on("connect", function(message) {
+        console.log("connect start");
+        var url = $("#url").val();
+        socket.emit("url", url);
     });
     
-    //データ受信ハンドラ
-    socket.on('amidaData', function(data){
+    // データ("amidaData")受信ハンドラ
+    socket.on("amidaData", function(data){
         if (data) {
-            
+            // 座標データをセット
             line_data = data;
-            player_count = line_data.vertical.length;
-            get_line_length_definition();
             
+            // 全参加者数
+            all_player_count = line_data.vertical.length;
+            
+            // 座標定義情報
+            get_line_length_definition();
             
             // HTMLデザイン
             design();
             
-            var start_amida = $('#start_amida').val();
-            var holizontal_flag = (start_amida == "true") ? true : false;
-            
             // 静的ライン作成
+            var start_amida = $("#start_amida").val();
+            var holizontal_flag = (start_amida == "true") ? true : false;
             make_line(holizontal_flag);
             
-            // アニメーション
-            $('.start_button').live('click', function() {
-                // 初期化
-                make_line(true);
+            // アニメーション開始ボタン
+            $(".start_button").live("click", function() {
                 
-                // アニメーション開始
-                var index = $(this).attr("id").replace("button_", "");
-                animation(index);
-            });
-            
-            // ユーザー登録
-            $('.user_regist').click(function() {
-                var index = $(this).attr("id").replace("user_regist_", "");
-                var user_name  = $('#user_' + index).val();
-                if (user_name.length == 0 || user_name.length > 8) {
-                  alert('1文字以上8文字以内で名前を入力してください');
-                } else {
-                  var url = $('#url').val();
-                  socket.emit('user', { url : url, position : index, name : user_name});
+                if (animation_flag) {
+                    animation_flag = false;
+                    
+                    // 初期化
+                    make_line(true);
+                    
+                    // アニメーション開始
+                    var index = $(this).attr("id").replace("button_", "");
+                    animation(index);
                 }
             });
             
+            // ユーザー登録ボタン
+            $(".user_regist").click(function() {
+                var index = $(this).attr("id").replace("user_regist_", "");
+                var user_name  = $("#user_" + index).val();
+                if (user_name.length == 0 || user_name.length > 8) {
+                  alert("1文字以上8文字以内で名前を入力してください");
+                } else {
+                  var url = $("#url").val();
+                  socket.emit("user", { url : url, position : index, name : user_name});
+                }
+            });
             
-            console.log('data get :' + data.vertical.length);
+            console.log("data get :" + data.vertical.length);
         } else {
-            console.log('data not get');
+            console.log("data not get");
         }
     });
     
-    socket.on('message', function(message){
+    // メッセージ受信ハンドラ
+    socket.on("message", function(message){
         alert(message);
     });
     
-    socket.on('allUserPushed', function(data){
-        if (data) {
-          var url = $('#url').val();
-          if (data.url && url == data.url) {
-            $(window.location).attr('href', '/join/' + url);
-          }
-        }
-    });
-    
-    socket.on('users', function(data){
+    // データ("users")受信ハンドラ
+    socket.on("users", function(data){
         var users = data.users;
         if (users.length) {
-          if (player_count > 0 && player_count == users.length) {
+          if (all_player_count > 0 && all_player_count == users.length) {
             for (i = 0 ; i < users.length ; i++ ) {
               var user = users[i];
               var element = '<input type="button" id="button_' + user.position + '" class="start_button" value="' + user.name  + '" />';
-              $('#start_division_' + user.position).empty();
-              $('#start_division_' + user.position).append(element);
+              $("#start_division_" + user.position).empty();
+              $("#start_division_" + user.position).append(element);
             }
             make_line(true);
             design();
@@ -98,8 +100,8 @@ var socket = function () {
             for (i = 0 ; i < users.length ; i++ ) {
               var user = users[i];
               var element = '<div class="member_name">' + user.name + '</div>';
-              $('#start_division_' + user.position).empty();
-              $('#start_division_' + user.position).append(element);
+              $("#start_division_" + user.position).empty();
+              $("#start_division_" + user.position).append(element);
             }
             design();
           }
@@ -107,8 +109,8 @@ var socket = function () {
     });
     
     //サーバ切断
-    socket.on('disconnect', function(message){
-        console.log('切断されました');
+    socket.on("disconnect", function(message){
+        console.log("切断されました");
     });
 }
 
@@ -138,17 +140,17 @@ var point_length_y = 0;
 // 座標の中心点の実座標(pixel数)
 var base_point = null;
 
-
+// 座標定義
 var get_line_length_definition = function () {
     // 横棒座標の長さ
     horizontal_length = get_horizontal_length();
     
     // 座標ひとマス当たりのpixel数
-    point_length_x = Math.floor(total_width / player_count / horizontal_length);
+    point_length_x = Math.floor(total_width / all_player_count / horizontal_length);
     point_length_y = 20;
     
     // 座標の中心点の実座標(pixel数)
-    base_point = {x:Math.floor(total_width / player_count / 2) , y:0};
+    base_point = {x:Math.floor(total_width / all_player_count / 2) , y:0};
 }
 
 // *******************************************
@@ -157,19 +159,19 @@ var get_line_length_definition = function () {
 
 var design = function() {
     
-    $('#amida').width(point_length_x * player_count * horizontal_length);
+    $("#amida").width(point_length_x * all_player_count * horizontal_length);
     
-    $('.goal_division').width(point_length_x * horizontal_length);
+    $(".goal_division").width(point_length_x * horizontal_length);
     
-    $('.start_division').width(point_length_x * horizontal_length);
+    $(".start_division").width(point_length_x * horizontal_length);
     
-    var start_button_margin = Math.floor(total_width / player_count / 2) - 40;
-    $('.start_button').css('margin-left', start_button_margin + 'px');
+    var start_button_margin = Math.floor(total_width / all_player_count / 2) - 40;
+    $(".start_button").css("margin-left", start_button_margin + "px");
     
-    var start_input_area_margin = Math.floor(total_width / player_count / 2) - 55;
-    $('.start_input_area').css('margin-left', start_input_area_margin + 'px');
+    var start_input_area_margin = Math.floor(total_width / all_player_count / 2) - 55;
+    $(".start_input_area").css("margin-left", start_input_area_margin + "px");
     if (point_length_x * horizontal_length < 160) {
-        $('.start_input_area').width(80);
+        $(".start_input_area").width(80);
     }
 }
 
@@ -224,8 +226,8 @@ var set_point_y = function (point) {
 
 // 静的ライン作成
 var make_line = function (holizontal_flag) {
-    // canvasの2Dコンテキスト
-    var ctx = document.getElementById("sample").getContext("2d");
+    // Canvasの2Dコンテキスト
+    var ctx = $("#amida_canvas").get(0).getContext("2d");
     
     // 縦ライン
     for (i = 0 ; i < line_data.vertical.length ; i++) {
@@ -297,7 +299,8 @@ var animation = function (index) {
     // X軸移動目標
     var x_destination;
     
-    var ctx = document.getElementById("sample").getContext("2d");
+    // Canvasの2Dコンテキスト
+    var ctx = $("#amida_canvas").get(0).getContext("2d");
     
     // アニメーションタイマー
     var timer_paint = setInterval(function () {
@@ -345,6 +348,7 @@ var animation = function (index) {
         // ゴールに到達したかどうかを判別する
         if (y == set_point_y(y_end)) {
             clearInterval(timer_paint);
+            animation_flag = true;
             alert("Goal");
         }
     }, animation_define.interval);

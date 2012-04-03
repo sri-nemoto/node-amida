@@ -13,9 +13,6 @@ exports.index = function(req, res) {
     res.redirect('/auth/' + url);
   } else {
     // 認証OKの場合
-    
-    // @todo validation
-    
     if (url) {
       Manager.find(url, function(err, amidas) {
         if(!err && amidas.length == 1) {
