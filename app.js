@@ -57,7 +57,7 @@ process.on('uncaughtException', function(err) {  console.log('uncaughtException 
   process.exit(0);
 });
 
-app.listen(3000);
+app.listen(8080);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 
 // socket io用
