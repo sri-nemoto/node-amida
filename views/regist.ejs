@@ -1,63 +1,62 @@
 <div id="main" class="clearfix">
     <!-- Show a "Please Upgrade" box to both IE7 and IE6 users (Edit to IE 6 if you just want to show it to IE6 users) - jQuery will load the content from js/ie.html into the div -->
-    
+
     <!--[if lte IE 7]>
         <div class="ie warning"></div>
     <![endif]-->
-    
+
     <div id="content" role="main">
         <article class="post">
-                <form action="registCheck" method="post">
-                	<fieldset>
-                    	<legend>新規作成</legend>
+                <form action="registComp" method="post">
+                  <fieldset>
+                      <legend>新規作成</legend>
 
                         <p>
                             <label for="title">タイトル</label>
                             <input type="text" name="title" id="title" maxlength= "20" value="<%= title %>" />
-                            <% if (error.title) { %>
-                                <div class="error"><%= error.title %></div>
-                            <% } %>
+
                         </p>
-                        
+
+
                         <p>
                             <label for="lottery_number">くじの本数</label>
                             <input type="number" name="lottery_number" id="lottery_number" value="<%= lottery_number %>" />
-                            <% if (error.lottery_number) { %>
-                                <div class="error"><%= error.lottery_number %></div>
-                            <% } %>
-                        </p>
-                        
-                        <p>
-                            <label for="adminPass">利用パスワード(任意)</label>
-                            <input type="text" name="adminPass" id="adminPass" pattern="^[0-9A-Za-z]+$" maxlength= "11" value="<%= adminPass %>" />
-                            <% if (error.adminPass) { %>
-                                <div class="error"><%= error.adminPass %></div>
-                            <% } %>
-                        </p>                        
-                        
-                        <p>
-                        	<label for="message">利用メッセージ(任意)</label>
-                        	<textarea name="message" id="message" cols="50" rows="10" maxlength= "300" autofocus><%= message %></textarea>
-                            <% if (error.message) { %>
-                                <div class="error"><%= error.message %></div>
-                            <% } %>
                         </p>
 
-                        
+                        <div>
+                          <label>アイテム</label>
+                          <div>
+                              <canvas id="amida"></canvas>
+                          </div>
+                          <div class="item_forms"></div>
+                        </div>
+                        <div style="clear: both;display: block;margin-bottom: 20px;"></div>
+
+                        <p>
+                            <label for="amida_pass">利用パスワード(任意)</label>
+                        </p>
+
+
+                        <p>
+                          <label for="message">利用メッセージ(任意)</label>
+                          <textarea name="message" id="message" cols="50" rows="10" maxlength= "300"><%= message %></textarea>
+                        </p>
+
+
                         <p>
                         <input type="submit" name="submit" value="作成" />
                         </p>
-                    
-                    </fieldset>
-                    
-                    <p class="hide" id="response"></p>
-                
-                </form>
-        
-        </article> <!-- .post -->
-    
-    </div> <!-- #content -->
-    
 
-    
+                    </fieldset>
+
+                    <p class="hide" id="response"></p>
+
+                </form>
+
+        </article> <!-- .post -->
+
+    </div> <!-- #content -->
+
+
+
 </div> <!-- #main -->
