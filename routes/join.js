@@ -1,4 +1,3 @@
-
 /*
  * add member
  */
@@ -10,24 +9,23 @@ exports.index = function(req, res) {
   
   // 認証チェック
   if (req.session.auth != url) {
+    // 認証NGの場合
     res.redirect('/auth/' + url);
-  }
-  
-  
-  // @todo validation
-  
-  if (url) {
-    Manager.find(url, function(err, amidas) {
-      if(!err && amidas.length == 1) {
-        res.render('join', {amida: amidas[0]});
-      } else {
-        console.log(err);
-        res.redirect('/');
-      }
-    });
   } else {
-    console.log('error');
-    res.redirect('/');
+    // 認証OKの場合
+    if (url) {
+      Manager.find(url, function(err, amidas) {
+        if(!err && amidas.length == 1) {
+          res.render('join', {amida: amidas[0]});
+        } else {
+          console.log(err);
+          res.redirect('/');
+        }
+      });
+    } else {
+      console.log('error');
+      res.redirect('/');
+    }
   }
 }
 
@@ -68,9 +66,10 @@ exports.socket = function (app) {
         Manager.join(url, name, position, function(err, amida) {
           if (!err) {
             console.log('join success');
-            client.emit('allUserPushed', { url: url });
+            var users = amida.users;
+            client.emit('users', { users: amida.users });
             // 同じchannelに属しているsocket clientに対してのみbroadcast
-            client.broadcast.to(url).emit('allUserPushed', { url: url });
+            client.broadcast.to(url).emit('users', { users: users });
           } else {
             console.log(err);
             client.send(err.message);

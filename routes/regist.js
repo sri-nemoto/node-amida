@@ -7,12 +7,12 @@ var Validator = require('validator').Validator;
 
 exports.index = function(req, res){
   var title = '';
-  var lottery_number = '';
+  var lotteryNumber = '';
   var userPass = '';
   var message = '';
   var error = [];
   
-  res.render('regist', { locals: { title:title, lottery_number:lottery_number,
+  res.render('regist', { locals: { title:title, lotteryNumber:lotteryNumber,
         userPass:userPass, message:message, error:error } });
         
 };
@@ -24,7 +24,7 @@ exports.index = function(req, res){
 exports.check = function(req, res){
     
   var title = req.body.title;
-  var lottery_number = req.body.lottery_number;
+  var lotteryNumber = req.body.lotteryNumber;
   var userPass = req.body.userPass;
   var message = req.body.message;
   var plots = [];
@@ -43,7 +43,7 @@ exports.check = function(req, res){
   
   // バリデートチェックを行う。
   validator.check(title, {"title" : "タイトルが不正です。"}).len(2,20);
-  validator.check(lottery_number, {"lottery_number" : "半角数字で入力してください。"}).isInt(); 
+  validator.check(lotteryNumber, {"lotteryNumber" : "半角数字で入力してください。"}).isInt(); 
   if (userPass) validator.check(userPass, {"userPass" : "パスワードが不正です。"}).len(1,10);
   if (message) validator.check(message, {"message" : "メッセージが不正です。"}).len(1,300);
   
@@ -52,13 +52,13 @@ exports.check = function(req, res){
   if (vali_errors[0]) {
       // 入力フォームにてエラー表示を行う。
       console.log(vali_errors[0]);
-      //console.log(vali_errors[1].lottery_number);
-      res.render('regist', { locals: { title:title, lottery_number:lottery_number,
+      //console.log(vali_errors[1].lotteryNumber);
+      res.render('regist', { locals: { title:title, lotteryNumber:lotteryNumber,
         userPass:userPass, message:message, error:vali_errors[0] } });
   }
   
   // 横線の作成。
-  Manager.makePlotsData(lottery_number, function(err, plotsRes) {
+  Manager.makePlotsData(lotteryNumber, function(err, plotsRes) {
     // @todo something
     plots = plotsRes;
   });
