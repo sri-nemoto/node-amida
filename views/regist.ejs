@@ -28,10 +28,10 @@
                         </p>
                         
                         <p>
-                            <label for="adminPass">利用パスワード(任意)</label>
-                            <input type="text" name="adminPass" id="adminPass" pattern="^[0-9A-Za-z]+$" maxlength= "11" value="<%= adminPass %>" />
-                            <% if (error.adminPass) { %>
-                                <div class="error"><%= error.adminPass %></div>
+                            <label for="userPass">利用パスワード(任意)</label>
+                            <input type="text" name="userPass" id="userPass" pattern="^[0-9A-Za-z]+$" maxlength= "11" value="<%= userPass %>" />
+                            <% if (error.userPass) { %>
+                                <div class="error"><%= error.userPass %></div>
                             <% } %>
                         </p>                        
                         
