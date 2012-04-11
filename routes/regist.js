@@ -67,7 +67,7 @@ exports.check = function(req, res){
       
       // TODO urlParam 
       console.log(urlParam);
-          
+      
       // データの整形
       var data = [];
           data.title   = title;
@@ -85,10 +85,9 @@ exports.check = function(req, res){
         // @todo something
         console.log(err);
       });
+      // 作成されたamidaを表示する。
+      res.redirect('/join/' + urlParam);
+      });
     });
-  });
-  
-  // 作成されたamidaを表示する。
-  res.redirect('/hoge/'); //+ url);
 
 };
