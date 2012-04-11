@@ -17,7 +17,6 @@ exports.index = function(req, res){
         
 };
 
-
 /*
  * registCheck amida
  */
@@ -28,7 +27,7 @@ exports.check = function(req, res){
   var userPass = req.body.userPass;
   var message = req.body.message;
   var plots = [];
-  var urlParam = 'torenai';
+  var urlParam = '';
   
   // add my method
   Validator.prototype.error = function (msg) {
@@ -38,7 +37,7 @@ exports.check = function(req, res){
   Validator.prototype.getErrors = function () {
     return this._errors;
   }
-    
+  
   var validator = new Validator();
   
   // バリデートチェックを行う。
@@ -50,46 +49,44 @@ exports.check = function(req, res){
   // varidator error catch
   var vali_errors = validator.getErrors();
   if (vali_errors[0]) {
-      // 入力フォームにてエラー表示を行う。
-      console.log(vali_errors[0]);
-      //console.log(vali_errors[1].lotteryNumber);
-      res.render('regist', { locals: { title:title, lotteryNumber:lotteryNumber,
-        userPass:userPass, message:message, error:vali_errors[0] } });
+    // 入力フォームにてエラー表示を行う。
+    console.log(vali_errors[0]);
+    //console.log(vali_errors[1].lotteryNumber);
+    res.render('regist', { locals: { title:title, lotteryNumber:lotteryNumber,
+    userPass:userPass, message:message, error:vali_errors[0] } });
   }
   
   // 横線の作成。
   Manager.makePlotsData(lotteryNumber, function(err, plotsRes) {
-    // @todo something
     plots = plotsRes;
+      
+    // URLの作成。
+    Manager.makeRandomUrlParam(10, function(err, urlParamRes){
+      //console.log(urlParamRes);
+      urlParam = urlParamRes;
+      
+      // TODO urlParam 
+      console.log(urlParam);
+          
+      // データの整形
+      var data = [];
+          data.title   = title;
+          data.message = message;
+          data.users   = '';        // ここではまだ入力値ナシ
+          data.items   = '';        //items;
+          data.userPass = userPass;
+          data.url       = urlParam;
+          data.plots     = plots;
+          
+      console.log(data);
+          
+      // mongoDBへ登録を行う。
+      Manager.regist(data, function(err, amida)  {
+        // @todo something
+        console.log(err);
+      });
+    });
   });
-  console.log(plots);
-  
-  // URLの作成。
-  Manager.makeRandomUrlParam(10, function(err, urlParamRes){
-    console.log(urlParamRes);
-    urlParam = urlParamRes;
-  });
-  
-  // TODO urlParam取れないなんで？
-  console.log(urlParam);
-  
-  // データの整形
-  var data = [];
-  data.title   = title;
-  data.message = message;
-  data.users   = '';        // ここではまだ入力値ナシ
-  data.items   = '';        //items;
-  data.userPass = userPass;
-  //data.url       = url;
-  data.plots     = plots;
-  
-  //console.log(data);
-  
-  // mongoDBへ登録を行う。
-  //Manager.regist(data, function(err, amida)  {
-    // @todo something
-    //console.log(err);
-  //});
   
   // 作成されたamidaを表示する。
   res.redirect('/hoge/'); //+ url);
