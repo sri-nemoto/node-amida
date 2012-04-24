@@ -52,8 +52,9 @@ exports.check = function(req, res){
     var map = new Object();
     map["item_" + i] =    "[item_" + i + "」が不正です。";
     validator.check(item_name, map["item_" + i]).len(1,30);
-    
-    items.push({"name" : eval("req.body.item_" + i), "position" : i });
+    var position = i - 1;
+    console.log(position);
+    items.push({"name" : eval("req.body.item_" + i), "position" : position });
   }
   
   // varidator error catch
