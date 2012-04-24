@@ -61,13 +61,34 @@ var set_form = function() {
   var margin = Math.floor(pixel_x / 2 - 55);
   for (i = 1; i <= player_count; i++) {
     var id = 'item_' + i;
-    var form = '<div class="item" style="width: ' + pixel_x + 'px; height: 30px; float: left; "><input type="text" name="' + id + '" id="' + id + '" style="width: 80px; text-align: center; margin-left: ' + margin + 'px; "/>';
+    var form = '<div class="item" style="width: ' + pixel_x + 'px; height: 30px; float: left; "><input type="text" name="' + id + '" id="' + id + '" value=" <%= lotteryNumber %>" style="width: 80px; text-align: center; margin-left: ' + margin + 'px; " />';
     $(".item_forms").append(form);
   }
 }
 
 // event
-$('#lottery_number').bind('keyup', function() {
+$('#lotteryNumber').bind('keyup', function() {
+  // form clear
+  window.alert('keyup');
+  $(".item_forms").empty();
+
+  // canvas clear
+  var ctx = document.getElementById("amida").getContext("2d");
+  ctx.beginPath();
+  ctx.clearRect(0, 0, canvas_width, canvas_height);
+
+  var lot = parseInt($(this).val());
+  if (isNaN(lot) === false && lot <= 8) {
+    player_count = lot;
+    set_pixel_x();
+    design();
+    draw_canvas();
+    set_form();
+  }
+});
+
+// event
+$('#lotteryNumber').load('keyup', function() {
   // form clear
   $(".item_forms").empty();
 
