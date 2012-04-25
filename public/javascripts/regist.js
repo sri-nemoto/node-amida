@@ -61,7 +61,7 @@ var set_form = function() {
   var margin = Math.floor(pixel_x / 2 - 55);
   for (i = 1; i <= player_count; i++) {
     var id = 'item_' + i;
-    var form = '<div class="item" style="width: ' + pixel_x + 'px; height: 30px; float: left; "><input type="text" name="' + id + '" id="' + id + '" value=" <%= lotteryNumber %>" style="width: 80px; text-align: center; margin-left: ' + margin + 'px; " />';
+    var form = '<div class="item" style="width: ' + pixel_x + 'px; height: 30px; float: left; "><input type="text" name="' + id + '" id="' + id + '" value="" style="width: 80px; text-align: center; margin-left: ' + margin + 'px; " />';
     $(".item_forms").append(form);
   }
 }
@@ -69,7 +69,6 @@ var set_form = function() {
 // event
 $('#lotteryNumber').bind('keyup', function() {
   // form clear
-  window.alert('keyup');
   $(".item_forms").empty();
 
   // canvas clear

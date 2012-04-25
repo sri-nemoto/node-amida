@@ -19,10 +19,9 @@
                             <% } %>
                         </p>
 
-
                         <p>
-                            <label for="lotteryNumber">くじの本数</label>
-                            <input type="number" name="lotteryNumber" id="lotteryNumber" value="<%= lotteryNumber %>" />
+                            <label for="lotteryNumber">くじの本数 (3～9本)</label>
+                            <input type="number" name="lotteryNumber" id="lotteryNumber" maxlength= "1"  value="<%= lotteryNumber %>" />
                             <% if (error.lotteryNumber) { %>
                                 <div class="error"><%= error.lotteryNumber %></div>
                             <% } %>
@@ -35,6 +34,11 @@
                           </div>
                           <div class="item_forms"></div>
                         </div>
+                        
+                        <% if (error.items) { %>
+                          <div class="error"><%= error.items %></div>
+                        <% } %>
+                        
                         <div style="clear: both;display: block;margin-bottom: 20px;"></div>
 
                         <p>
@@ -49,7 +53,6 @@
                           <label for="message">利用メッセージ(任意)</label>
                           <textarea name="message" id="message" cols="50" rows="10" maxlength= "300"><%= message %></textarea>
                         </p>
-
 
                         <p>
                         <input type="submit" name="submit" value="作成" />

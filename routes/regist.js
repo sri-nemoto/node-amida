@@ -42,8 +42,10 @@ exports.check = function(req, res){
   var validator = new Validator();
   
   // バリデートチェックを行う。
-  validator.check(title, {"title" : "「タイトル」が不正です。"}).len(2,20);
-  validator.check(lotteryNumber, {"lotteryNumber" : "「くじの本数」を半角数字で入力してください。"}).isInt(); 
+  validator.check(title, {"title" : "「タイトル」が不正です。"}).len(1,20);
+  validator.check(lotteryNumber, {"lotteryNumber" : "「くじの本数」を半角数字で入力してください。"}).isInt();
+  validator.check(lotteryNumber, {"lotteryNumber" : "「くじの本数」を3～9本で入力してください。"}).min(3);
+  validator.check(lotteryNumber, {"lotteryNumber" : "「くじの本数」を3～9本で入力してください。"}).max(9);
   if (userPass) validator.check(userPass, {"userPass" : "「パスワード」が不正です。"}).len(1,10);
   if (message) validator.check(message, {"message" : "「メッセージ」が不正です。"}).len(1,300);
   
@@ -51,10 +53,14 @@ exports.check = function(req, res){
     var item_name = eval("req.body.item_" + i);
     var map = new Object();
     map["item_" + i] =    "[item_" + i + "」が不正です。";
-    validator.check(item_name, map["item_" + i]).len(1,30);
+    if (item_name) {
+      validator.check(item_name, {"items" : map["item_" + i]}).len(1,30);
+    } else {
+      item_name = 'なし';
+    }
+    
     var position = i - 1;
-    console.log(position);
-    items.push({"name" : eval("req.body.item_" + i), "position" : position });
+    items.push({"name" : item_name, "position" : position });
   }
   
   // varidator error catch
@@ -84,12 +90,9 @@ exports.check = function(req, res){
             data.userPass = userPass;
             data.url       = urlParam;
             data.plots     = plots;
-            
-        //console.log(data);
           
         // mongoDBへ登録を行う。
         Manager.regist(data, function(err, amida)  {
-          // @todo something
           console.log(err);
         });
         // 作成されたamidaを表示する。
