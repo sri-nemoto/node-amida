@@ -83,7 +83,6 @@ exports.check = function(req, res){
         }
       }
     }
-    console.log(errors);
     // 入力フォームにてエラー表示を行う。
     res.render('regist', { locals: { title:title, lotteryNumber:lotteryNumber,
     items:items, userPass:userPass, message:message, error:errors } });
