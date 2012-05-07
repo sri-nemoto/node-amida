@@ -66,11 +66,27 @@ exports.check = function(req, res){
   // varidator error catch
   var vali_errors = validator.getErrors();
   if (vali_errors[0]) {
+   var errors = [];
+    for(var i in vali_errors){
+      for (var key in vali_errors[i]) {
+        if (key === 'title') {
+          errors['title'] = vali_errors[i][key];
+        }
+        if (key === 'lotteryNumber') {
+          errors['lotteryNumber'] = vali_errors[i][key];
+        }
+        if (key === 'userPass') {
+          errors['userPass'] = vali_errors[i][key];
+        }
+        if (key === 'message') {
+          errors['message'] = vali_errors[i][key];
+        }
+      }
+    }
+    console.log(errors);
     // 入力フォームにてエラー表示を行う。
-    console.log(vali_errors[0]);
-    //console.log(vali_errors[1].lotteryNumber);
     res.render('regist', { locals: { title:title, lotteryNumber:lotteryNumber,
-    items:items, userPass:userPass, message:message, error:vali_errors[0] } });
+    items:items, userPass:userPass, message:message, error:errors } });
     
   } else {
     // 横線の作成。
