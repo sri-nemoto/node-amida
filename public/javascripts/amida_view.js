@@ -16,7 +16,7 @@ var animation_flag = true;
 // *******************************************
 
 var socket = function () {
-    var socket = io.connect("http://"+ location.hostname +":8080");
+    var socket = io.connect("http://" + location.hostname + ":" + location.port);
     
     // コネクションハンドラ
     socket.on("connect", function(message) {
