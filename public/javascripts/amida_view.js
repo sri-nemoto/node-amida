@@ -42,8 +42,9 @@ var socket = function () {
             
             // 静的ライン作成
             var start_amida = $("#start_amida").val();
-            var holizontal_flag = (start_amida == "true") ? true : false;
-            make_line(holizontal_flag);
+            var cover_flag = (start_amida == "true") ? false : true;
+            view_cover(cover_flag);
+            make_line();
             
             // アニメーション開始ボタン
             $(".start_button").live("click", function() {
@@ -52,7 +53,8 @@ var socket = function () {
                     animation_flag = false;
                     
                     // 初期化
-                    make_line(true);
+                    view_cover(false);
+                    make_line();
                     
                     // アニメーション開始
                     var index = $(this).attr("id").replace("button_", "");
@@ -94,7 +96,8 @@ var socket = function () {
               $("#start_division_" + user.position).empty();
               $("#start_division_" + user.position).append(element);
             }
-            make_line(true);
+            view_cover(false);
+            make_line();
             design();
           } else {
             for (i = 0 ; i < users.length ; i++ ) {
@@ -180,7 +183,6 @@ var design = function() {
 // 静的ライン定義
 // *******************************************
 var line_define = {
-
     stroke_style : "#000000",
     line_width : 8,
     text_font : "12px 'MS ゴシック'",
@@ -188,6 +190,15 @@ var line_define = {
     text_align : "center"
 };
 
+// *******************************************
+// 静的ライン覆い定義
+// *******************************************
+var cover_define = {
+    stroke_style : "#000000",
+    start : { x : 20, y : 20 },
+    width : 860,
+    height : 360 
+};
 
 // *******************************************
 // アニメーション定義
@@ -253,31 +264,48 @@ var make_line = function (holizontal_flag) {
         ctx.stroke();
     }
     
-    if (holizontal_flag) {
+    // 横ライン
+    for (i = 0 ; i < line_data.horizontal.length ; i++) {
+        
         // 横ライン
-        for (i = 0 ; i < line_data.horizontal.length ; i++) {
-            
-            // 横ライン
-            var point_data = line_data.horizontal[i];
-            var start      = point_data.start;
-            var end        = point_data.end;
-            
-            // 横ライン作成
-            ctx.beginPath();
-            
-            // ライン始点
-            ctx.moveTo(set_point_x(start.x), set_point_y(start.y));
-            
-            // ライン終点
-            ctx.lineTo(set_point_x(end.x), set_point_y(end.y));
-            
-            // 定義したパスを描画
-            ctx.strokeStyle = line_define.stroke_style;
-            ctx.lineWidth   = line_define.line_width;
-            ctx.stroke();
-        }
+        var point_data = line_data.horizontal[i];
+        var start      = point_data.start;
+        var end        = point_data.end;
+        
+        // 横ライン作成
+        ctx.beginPath();
+        
+        // ライン始点
+        ctx.moveTo(set_point_x(start.x), set_point_y(start.y));
+        
+        // ライン終点
+        ctx.lineTo(set_point_x(end.x), set_point_y(end.y));
+        
+        // 定義したパスを描画
+        ctx.strokeStyle = line_define.stroke_style;
+        ctx.lineWidth   = line_define.line_width;
+        ctx.stroke();
     }
 };
+
+// 静的ラインの覆いの表示・非表示
+var view_cover = function (cover_flag) {
+    // Canvasの2Dコンテキスト
+    var ctx = $("#amida_canvas").get(0).getContext("2d");
+    
+    var cover_start = cover_define.start;
+    var cover_width = cover_define.width;
+    var cover_height = cover_define.height;
+    
+    if (!cover_flag) {
+        // 覆い非表示
+        ctx.clearRect(cover_start.x, cover_start.y, cover_width, cover_height);
+    } else {
+        // 覆い表示
+        ctx.fillStyle = cover_define.stroke_style;
+        ctx.fillRect(cover_start.x, cover_start.y, cover_width, cover_height);
+    }
+}
 
 // アニメーション
 var animation = function (index) {
