@@ -1,1 +1,42 @@
-Hello world
+<div id="main" class="clearfix">
+    <!-- Show a "Please Upgrade" box to both IE7 and IE6 users (Edit to IE 6 if you just want to show it to IE6 users) - jQuery will load the content from js/ie.html into the div -->
+    
+    <!--[if lte IE 7]>
+        <div class="ie warning"></div>
+    <![endif]-->
+    
+    <div id="content" role="main">
+        <article class="post">
+                <form action="/regist" method="post">
+                    <fieldset>
+                        <legend>アミダくじをしよう！！</legend>
+                        
+                        <p><label for="title">アミダくじの利用法</label></p>
+                        <p>
+                            <ol>
+                              <li>
+                              アミダくじ情報の登録
+                              <ul>
+                                  <li>タイトル</li>
+                                  <li>くじの本数</li>
+                                  <li>利用パスワード</li>
+                                  <li>メッセージ</li>
+                              </ul>
+                              </li>
+                              <li>(複数人で行う場合は)登録後のURLをメンバーに教える</li>
+                              <li>登録した利用パスワードを入力</li>
+                              <li>くじを選択</li>
+                              <li>(全員選択し終えたら)アミダくじスタート</li>
+                            </ol>
+                        </p>
+                        <p>
+                            <input type="submit" name="submit" value="スタート" />
+                        </p>
+                    </fieldset>
+                </form>
+        
+        </article>
+    
+    </div> <!-- #content -->
+
+</div> <!-- #main -->
