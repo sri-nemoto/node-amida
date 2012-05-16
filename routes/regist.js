@@ -44,8 +44,8 @@ exports.check = function(req, res){
   // バリデートチェックを行う。
   validator.check(title, {"title" : "「タイトル」が不正です。"}).len(1,20);
   validator.check(lotteryNumber, {"lotteryNumber" : "「くじの本数」を半角数字で入力してください。"}).isInt();
-  validator.check(lotteryNumber, {"lotteryNumber" : "「くじの本数」を3～9本で入力してください。"}).min(3);
-  validator.check(lotteryNumber, {"lotteryNumber" : "「くじの本数」を3～9本で入力してください。"}).max(9);
+  validator.check(lotteryNumber, {"lotteryNumber" : "「くじの本数」を3～8本で入力してください。"}).min(3);
+  validator.check(lotteryNumber, {"lotteryNumber" : "「くじの本数」を3～8本で入力してください。"}).max(8);
   if (userPass) validator.check(userPass, {"userPass" : "「パスワード」が不正です。"}).len(1,10);
   if (message) validator.check(message, {"message" : "「メッセージ」が不正です。"}).len(1,300);
   
