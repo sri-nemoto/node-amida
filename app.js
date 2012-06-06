@@ -1,13 +1,12 @@
 /**
  * Module dependencies.
  */
-
 var express = require('express')
   , routes_index = require('./routes/index')
   , routes_regist = require('./routes/regist')
   , routes_join = require('./routes/join')
   , routes_auth = require('./routes/auth')
-  ,  Manager = require('./lib/amida').Manager;
+  , config = require('configure');
 
 var app = module.exports = express.createServer();
 
@@ -58,7 +57,7 @@ process.on('uncaughtException', function(err) {  console.log('uncaughtException 
   process.exit(0);
 });
 
-app.listen(8080);
+app.listen(config.serverPort);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 
 // socket io用
