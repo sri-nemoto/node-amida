@@ -1,4 +1,13 @@
 {
     "serverPort" : 8080,
-    "mongoDbUrl" : "mongodb://localhost/amida"
+    "mongoDbUrl" : "mongodb://localhost/amida",
+    "error" : {
+        "regist" : {
+            "title" : "「タイトル」が不正です。",
+            "lotteryNumberType" : "「くじの本数」を半角数字で入力してください。",
+            "lotteryNumberLength" : "「くじの本数」を3～8本で入力してください。",
+            "userPass" : "「パスワード」が不正です。",
+            "message" : "「メッセージ」が不正です。"
+        }
+    }
 }

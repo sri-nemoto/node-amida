@@ -1,9 +1,10 @@
 /*
  * regist amida
  */
-var Manager = require('../lib/amida').Manager;
-var check = require('validator').check;
-var Validator = require('validator').Validator;
+var Manager = require('../lib/amida').Manager
+ , check = require('validator').check
+ , Validator = require('validator').Validator
+ , config = require('configure');
 
 exports.index = function(req, res){
   var title = '';
@@ -42,12 +43,12 @@ exports.check = function(req, res){
   var validator = new Validator();
   
   // バリデートチェックを行う。
-  validator.check(title, {"title" : "「タイトル」が不正です。"}).len(1,20);
-  validator.check(lotteryNumber, {"lotteryNumber" : "「くじの本数」を半角数字で入力してください。"}).isInt();
-  validator.check(lotteryNumber, {"lotteryNumber" : "「くじの本数」を3～8本で入力してください。"}).min(3);
-  validator.check(lotteryNumber, {"lotteryNumber" : "「くじの本数」を3～8本で入力してください。"}).max(8);
-  if (userPass) validator.check(userPass, {"userPass" : "「パスワード」が不正です。"}).len(1,10);
-  if (message) validator.check(message, {"message" : "「メッセージ」が不正です。"}).len(1,300);
+  validator.check(title, {"title" : config.error.regist.title}).len(1,20);
+  validator.check(lotteryNumber, {"lotteryNumber" : config.error.regist.lotteryNumberType}).isInt();
+  validator.check(lotteryNumber, {"lotteryNumber" : config.error.regist.lotteryNumberLength}).min(3);
+  validator.check(lotteryNumber, {"lotteryNumber" : config.error.regist.lotteryNumberLength}).max(8);
+  if (userPass) validator.check(userPass, {"userPass" : config.error.regist.userPass}).len(1,10);
+  if (message) validator.check(message, {"message" : config.error.regist.message}).len(1,300);
   
   for (var i = 1; i <= lotteryNumber; i++){
     var item_name = eval("req.body.item_" + i);
