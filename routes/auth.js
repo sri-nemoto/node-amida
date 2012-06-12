@@ -37,6 +37,7 @@ exports.check = function (req, res) {
             });
       } else {
         req.session.auth = url;
+        console.log("auth:" + req.session.auth);
         res.redirect('/join/' + url);
       }
     }
