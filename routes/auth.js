@@ -1,7 +1,8 @@
 /*
  * view amida auth
  */
-var Manager = require('../lib/amida').Manager;
+var Manager = require('../lib/amida').Manager
+  , AmidaError = require('../lib/amidaError').AmidaError;
 
 // 認証ページ生成
 exports.index = function (req, res) {
@@ -23,23 +24,22 @@ exports.check = function (req, res) {
           password_error: '不正なURLです',
           auth_url: url
         });
-  }
-  Manager.auth(url, password, function (err, amida) {
-      if (err || amida[0] === undefined) {
-        if (err) {
-          console.log(err);
-          err = 'システム内部でエラーが発生しました';
-        }
-        res.render('auth', {
+  }else {
+      Manager.auth(url, password, function (err, amida) {
+          if (err) {
+            AmidaError.redirect(err, res);
+          } else if (amida[0] === undefined) {
+            res.render('auth', {
               password: password,
-              password_error: err || 'パスワードが存在しません',
+              password_error: 'パスワードが存在しません',
               auth_url: url
             });
-      } else {
-        req.session.auth = url;
-        console.log("auth:" + req.session.auth);
-        res.redirect('/join/' + url);
-      }
-    }
-  );
+          } else {
+            req.session.auth = url;
+            console.log("auth:" + req.session.auth);
+            res.redirect('/join/' + url);
+          }
+        }
+      );
+  }
 };

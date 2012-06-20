@@ -2,6 +2,7 @@
  * regist amida
  */
 var Manager = require('../lib/amida').Manager
+ , AmidaError = require('../lib/amidaError').AmidaError
  , check = require('validator').check
  , Validator = require('validator').Validator
  , config = require('configure');
@@ -109,10 +110,14 @@ exports.check = function(req, res){
           
         // mongoDBへ登録を行う。
         Manager.regist(data, function(err, amida)  {
-          console.log(err);
+          if (err) {
+            AmidaError.redirect(err, res);
+          } else {
+            // 作成されたamidaを表示する。
+            res.redirect('/join/' + urlParam);
+          }
         });
-        // 作成されたamidaを表示する。
-        res.redirect('/join/' + urlParam);
+        
       });
     });
   }
