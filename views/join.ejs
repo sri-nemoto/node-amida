@@ -13,12 +13,15 @@
         
             <h1 class="entry-title"><%= amida.title %></h1>
             
+            <% if (amida.message) { %>
+              <h5 class="entry-title"><%= amida.message %></h5>
+            <% } %>
             <div class="entry-content">
                 <div id="amida" style="margin:0px auto;">
                     <div>
                         <% if (amida.items.length == amida.users.length) { %>
                             <% for ( var i = 0 ; i < amida.users.length ; i++ ) { %>
-                              <div class="start_division" id="start_division_<%= i %>"><input type="button" id="button_<%= i %>" class="start_button" value="<%= amida.users[i].name %>" /></div>
+                                <div class="start_division" id="start_division_<%= i %>"><input type="button" id="button_<%= i %>" class="start_button" value="<%= amida.users[i].name %>" /></div>
                             <% } %>
                         <% } else { %>
                             <% for ( var i = 0 ; i < amida.items.length ; i++ ) { %>
@@ -32,7 +35,7 @@
                                 <% } %>
                                 <% if (user_regist_flag) { %>
                                 <div class="start_input_area">
-                                  <input type="text" class="start_text" id="user_<%= i %>" value="" /><input type="button" class="user_regist" id="user_regist_<%= i %>" value="決定" />
+                                    <input type="text" class="start_text" id="user_<%= i %>" value="" /><input type="button" class="user_regist" id="user_regist_<%= i %>" value="決定" />
                                 </div>
                                 <% } %>
                             </div>
@@ -60,4 +63,5 @@
 
 </div> <!-- #main -->
 <script src="/socket.io/lib/socket.io.js"></script>
+<script src="/javascripts/amida_canvas.js"></script>
 <script src="/javascripts/amida_view.js"></script>

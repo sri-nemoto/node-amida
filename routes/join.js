@@ -1,7 +1,9 @@
 /*
  * add member
  */
-var Manager = require('../lib/amida').Manager;
+var Manager = require('../lib/amida').Manager
+ , AmidaError = require('../lib/amidaError').AmidaError
+ , config = require('configure');
 
 // アミダ表示(参加者入力画面)
 exports.index = function(req, res) {
@@ -25,14 +27,12 @@ exports.index = function(req, res) {
         }
       } else {
         // 該当レコードなし
-        console.log(err);
-        res.redirect('/');
+        AmidaError.redirect(err, res);
       }
     });
   } else {
     // 引数なし
-    console.log('error');
-    res.redirect('/');
+    AmidaError.redirect({ url : url, message : config.error.join.url }, res);
   }
 }
 
@@ -41,7 +41,7 @@ exports.socket = function (app) {
   var socketIo = require('socket.io');
   var io = socketIo.listen(app);
   io.sockets.on('connection', function(client){
-    // ブラウザでアクセスした時に表示される
+    // ブラウザでアクセス
     console.log('socket client is connected');
     
     //クライアント側からurl受信ハンドラ
@@ -61,7 +61,6 @@ exports.socket = function (app) {
     
     //クライアント側からuser受信ハンドラ
     client.on('user', function(data) {
-      console.log('join from socket client');
       
       if (data) {
         
@@ -88,7 +87,6 @@ exports.socket = function (app) {
     //クライアント切断時のハンドラ
     client.on('disconnect', function(){
       console.log('socket client is disconnected');
-      client.send('切断しました');
     });
   
   });
