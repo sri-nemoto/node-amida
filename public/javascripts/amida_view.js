@@ -21,17 +21,27 @@ var point_length_y = 0;
 // Canvas上の座標の原点のpixel数単位の座標
 var base_point = null;
 
-// Socket通信用オブジェクト
-var socket = io.connect("http://" + location.hostname + ":" + location.port);
+// Socket通信用URL
+var socket_url = "http://" + location.hostname + ":" + location.port;
 
 // アミダCanvasオブジェクト
 var canvas;
 
+// 出力メッセージ
+var view_message = {
+    goal: "GOAL!",
+    error: {
+        system: "システムエラーが発生しました！リロードをお願いします。",
+        user_name: "1文字以上8文字以内で名前を入力してください"
+    }
+}
 
 /**
  * ページがロードされたときの処理
  */
 $(function () {
+    // Socket通信用オブジェクト
+    var socket = io.connect(socket_url);
     
     // コネクションハンドラ
     socket.on("connect", function(message) {
@@ -63,6 +73,7 @@ $(function () {
             
             // 覆いの表示・非表示
             var cover_flag = ($("#start_amida").val() !== "true");
+            animation_flag = !cover_flag;
             canvas.cover(cover_flag);
             // 静的アミダライン表示
             canvas.makeLine();
@@ -70,7 +81,7 @@ $(function () {
             console.log("data get, vertilal line length :" + data.vertical.length);
         } else {
             console.log("data from server is not invalid");
-            alert("システムエラーが発生しました！リロードをお願いします。");
+            alert(view_message.error.system);
         }
     });
     
@@ -90,6 +101,7 @@ $(function () {
             // 覆いの非表示、静的アミダライン表示
             canvas.cover(false);
             canvas.makeLine();
+            animation_flag = true;
           }
           design();
         }
@@ -113,7 +125,7 @@ $(function () {
             var index = $(this).attr("id").replace("button_", "");
             canvas.animation(index, function (error) {
                 animation_flag = true;
-                var message = "GOAL!";
+                var message = view_message.goal;
                 if (error) {
                     console.log(error.message);
                     message = error.message;
@@ -128,7 +140,7 @@ $(function () {
         var index = $(this).attr("id").replace("user_regist_", "");
         var user_name  = $("#user_" + index).val();
         if (user_name.length == 0 || user_name.length > 8) {
-          alert("1文字以上8文字以内で名前を入力してください");
+          alert(view_message.error.user_name);
         } else {
           var url = $("#url").val();
           socket.emit("user", { url : url, position : index, name : user_name});
@@ -194,6 +206,9 @@ var design = function() {
 /**
  * (HTMLエレメント生成)
  * ユーザー入力欄、スタートボタン欄のHTMLを生成
+ *
+ * @param array uses 参加ユーザー情報
+ * @param boolean buttnon_flag アニメーション開始ボタンを表示するかどうか
  */
 var button_design = function (users, buttnon_flag) {
   if (buttnon_flag) {
